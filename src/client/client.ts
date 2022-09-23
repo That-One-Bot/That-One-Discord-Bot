@@ -24,12 +24,13 @@ const bot = async() => {
                 GatewayIntentBits.GuildEmojisAndStickers
             ],
         }),
-        sCmds: new Collection(),
-        cmds: new Collection(),
-        aliases: new Collection(),
+        sCmds: new Collection<string, object>(),
+        cmds: new Collection<string, object>(),
+        aliases: new Collection<string, object>(),
+        customCmds: new Collection<string, object>(),
         buttons: new Collection(),
-        config: new Collection(),
-        prefix: String,
+        config: new Collection<string, object>(),
+        prefix: new Collection<string, string>(),
         database: dbClient,
     }
 

@@ -6,6 +6,6 @@ export default {
     cooldown: 10000,
     options: [],
     run(client, interaction) {
-        interaction.reply(`🏓 Latency is **${interaction.createdTimestamp - Date.now()}ms**. API Latency is **${Math.round(client.ws.ping)}ms**`);
+        interaction.reply(`🏓 Latency is **${-(Date.now() - interaction.createdTimestamp)}ms**. API Latency is **${Math.round(client.ws.ping)}ms**`);
     },
 } as Command;

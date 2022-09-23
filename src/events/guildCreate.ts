@@ -12,16 +12,19 @@ export default async (bot:any) => {
         const guildInfo: GuildInfo = {
             guildId: guild.id,
             guildName: guild.name,
-            guildIcon: guild.iconURL() || '',
+            guildIcon: guild.iconURL() || undefined,
             guildOwner: guild.ownerId,
             members: guild.memberCount,
+            commands: [],
+            customCommands: [],
         }
         const infoDoc = doc(database, "Guilds", guild.id);
         setDoc(infoDoc, {
             ...guildInfo,
             GuildConfig: {...guildConfig}
-
         });
+
+        bot.config.set(guild.id, guildConfig);
 
         console.log(`Joined ${guild.name}!`);
     })

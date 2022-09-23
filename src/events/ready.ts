@@ -12,14 +12,14 @@ export default async (bot: any) => {
             snapshot.docs.forEach((doc) => {
                 const configData = doc.get('GuildConfig');
                 bot.config.set(doc.id, configData);
+                bot.prefix.set(doc.id, configData.prefix);
                 data.push({id: 'GuildConfig', ...configData});
             });
 
             if (data.length === 0) {
                 console.log('No data');
             } else {
-                console.log('Collection:')
-                console.log(bot.config)
+                console.log(bot.prefix)
             }
         } catch (error) {
             console.log(error)

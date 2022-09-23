@@ -8,7 +8,7 @@ export default async (bot: any) => {
     const {client, database, sCmds, cmds, aliases} = bot;
     client.on('messageCreate', async (message: Message) => {
         const config = bot.config.get(message.guild?.id);
-        const prefix = config?.prefix;
+        const prefix = bot.prefix.get(message.guild?.id);
 
         if (message.author.bot) return;
         if (message.channel.type !== 0) return;
