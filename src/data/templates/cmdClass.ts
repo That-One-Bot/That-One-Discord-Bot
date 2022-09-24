@@ -7,7 +7,7 @@ export interface Command { //Command Type for creation commands
     defaultPermission?: boolean;
     default_member_permissions?: PermissionsBitField;
     testOnly?: boolean;
-    ownerOnly?: boolean;
+    devOnly?: boolean;
     cooldown?: number;
     run: (client: Client, interaction: any) => Promise<void>;
 }

@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 serviceAccountKey.json*
+serviceAccountTest.json*
 build/
 .vscode/
 .history

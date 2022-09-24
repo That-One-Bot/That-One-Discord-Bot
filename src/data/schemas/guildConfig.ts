@@ -7,11 +7,11 @@ export interface GuildConfig {
 export interface GuildInfo {
     guildId: string;
     guildName: string;
-    guildIcon: string | undefined;
+    guildIcon: string;
     guildOwner: string;
     members: number;
     commands: any[] | undefined;
-    customCommands: any[] | undefined;
+    customCommands: any[];
 };
 
 export interface GuildCommand {

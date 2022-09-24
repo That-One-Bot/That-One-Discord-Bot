@@ -12,7 +12,7 @@ export default async (bot:any) => {
         const guildInfo: GuildInfo = {
             guildId: guild.id,
             guildName: guild.name,
-            guildIcon: guild.iconURL() || undefined,
+            guildIcon: guild.iconURL() || 'none',
             guildOwner: guild.ownerId,
             members: guild.memberCount,
             commands: [],
