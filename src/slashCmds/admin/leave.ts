@@ -1,4 +1,5 @@
 import {Command} from "../../data/templates/cmdClass";
+import {replyError, replySuccess} from "../../data/templates/botReplies";
 
 export default {
     name: 'leave',
@@ -16,6 +17,6 @@ export default {
         const user = interaction.options.getMember('user') || interaction.member;
 
         bot.client.emit('guildMemberRemove', user);
-        interaction.reply('Emitted Leave event');
+        replySuccess(interaction, 'Emitted Leave event');
     }
 } as Command;

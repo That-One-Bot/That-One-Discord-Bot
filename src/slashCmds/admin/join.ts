@@ -1,4 +1,5 @@
 import {Command} from "../../data/templates/cmdClass";
+import {replyError, replySuccess} from "../../data/templates/botReplies";
 
 export default {
     name: 'join',
@@ -16,6 +17,6 @@ export default {
         const user = interaction.options.getMember('user') || interaction.member;
 
         bot.client.emit('guildMemberAdd', user);
-        interaction.reply('Emitted join event');
+        replySuccess(interaction, 'Emitted Join event');
     }
 } as Command;
