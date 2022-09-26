@@ -100,6 +100,43 @@ export default async (bot: any) => {
                             }
                             slashCommand.run(bot, interaction)
                         }
+                    } else {
+                        if (!slashCommand.devOnly) {
+                            if(slashCommand.cooldown) {
+                                if (cooldown.has(`slash-${slashCommand.name}${int.user.id}`)) {
+                                    const time:any = await cooldown.get(`slash-${slashCommand?.name}${int!.user?.id}`);
+                                    const cooldownMessage = `You are currently on a \`${ms(time - Date.now(),{long : true})}\` cooldown!`
+                                    replyError(interaction, cooldownMessage)
+                                    return;
+                                }
+                                if (slashCommand.userPerms || slashCommand.botPerms) {
+                                    if (!interaction.member?.permissions.has(PermissionsBitField.resolve(slashCommand.userPerms || []))) {
+                                        replyError(interaction, `🚫 ${interaction.user}, You don't have \`${slashCommand.userPerms}\` permissions to use this command!`)
+                                        return
+                                    }
+                                    if(!interaction.guild?.members.cache.get(bot.user.id)?.permissions.has(PermissionsBitField.resolve(slashCommand.botPerms || []))) {
+                                        replyError(interaction, `🚫 ${interaction.user}, I don't have \`${slashCommand.botPerms}\` permissions to use this command!`)
+                                        return
+                                    }
+                                    return
+                                }
+                                slashCommand.run(bot, interaction)
+                                cooldown.set(`slash-${slashCommand.name}${int.user.id}`, Date.now() + slashCommand.cooldown)
+                                setTimeout(() => {
+                                    cooldown.delete(`${slashCommand.name}${interaction.user.id}`)
+                                }, slashCommand.cooldown)
+                            } else {
+                                if (slashCommand.userPerms || slashCommand.botPerms) {
+                                    if (!interaction.member?.permissions.has(PermissionsBitField.resolve(slashCommand.userPerms || []))) {
+                                        replyError(interaction, `🚫 ${interaction.user}, You don't have \`${slashCommand.userPerms}\` permissions to use this command!`)
+                                    }
+                                    if(!interaction.guild?.members.cache.get(bot.user.id)?.permissions.has(PermissionsBitField.resolve(slashCommand.botPerms || []))) {
+                                        replyError(interaction, `🚫 ${interaction.user}, I don't have \`${slashCommand.botPerms}\` permissions to use this command!`)
+                                    }
+                                }
+                                slashCommand.run(bot, interaction)
+                            }
+                        }
                     }
                 }
             } catch (error) {

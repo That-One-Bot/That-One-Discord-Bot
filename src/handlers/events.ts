@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 
 export default async(client: any) => {
-    console.log('Loading events...');
     const eventList: string[] = [];
     const eventDir: string = path.join(__dirname, '../events');
+    console.log('Loading events...');
     fs.readdirSync(eventDir).filter(
         (file: string) => file.endsWith('.js') || file.endsWith('.ts')
         ).forEach(async events => {
