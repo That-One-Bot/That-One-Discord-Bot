@@ -1,6 +1,5 @@
 import { Collection, Interaction, Message, PermissionsBitField, ChatInputCommandInteraction } from 'discord.js';
-import {collection, getDocs, deleteDoc} from 'firebase/firestore'
-import { replyError, replySuccess } from '../data/templates/botReplies';
+import { replyError, replySuccess } from '@/data/templates/botReplies';
 import ms from 'ms';
 const cooldown = new Collection();
 
@@ -76,11 +75,11 @@ export default async (bot: any) => {
                             if (slashCommand.userPerms || slashCommand.botPerms) {
                                 if (!interaction.member?.permissions.has(PermissionsBitField.resolve(slashCommand.userPerms || []))) {
                                     replyError(interaction, `🚫 ${interaction.user}, You don't have \`${slashCommand.userPerms}\` permissions to use this command!`)
-                                    return
+                                    return;
                                 }
                                 if(!interaction.guild?.members.cache.get(bot.user.id)?.permissions.has(PermissionsBitField.resolve(slashCommand.botPerms || []))) {
                                     replyError(interaction, `🚫 ${interaction.user}, I don't have \`${slashCommand.botPerms}\` permissions to use this command!`)
-                                    return
+                                    return;
                                 }
                                 return
                             }

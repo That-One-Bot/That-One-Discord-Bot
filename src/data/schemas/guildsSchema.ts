@@ -1,3 +1,5 @@
+import { GuildInfo,  G} from "./guildConfig"
+
 export const levelSchema = {
     xpMulti: Number
 }

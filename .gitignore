@@ -114,3 +114,4 @@ dist
 firebase*
 firestore*
 .firebaserc
+tobMongo.pem

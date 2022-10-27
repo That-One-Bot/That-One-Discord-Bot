@@ -1,8 +1,9 @@
-import { Interaction } from "discord.js";
+import { Interaction, GuildMember } from "discord.js";
 
 export default async (bot: any, interaction: Interaction) => {
     const {client, database, config} = bot;
-    client.on('guildMemberRemove', async (member: any) => {
+    client.on('guildMemberRemove', async (member: GuildMember) => {
+        if (member.user.bot) return;
         const guildId = member.guild.id;
         const guildConfig = config.get(guildId);
 
@@ -11,7 +12,7 @@ export default async (bot: any, interaction: Interaction) => {
             return
         } else if (guildConfig.welcomeChannel !== '') {
             const channel = member.guild.channels.cache.get(guildConfig.welcomeChannel);
-            channel.send(`${member.user.tag} left ${member.guild.name}!`);
+            console.log(channel)
         }
     })
 }

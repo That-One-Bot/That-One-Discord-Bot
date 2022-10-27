@@ -1,8 +1,9 @@
 import { Guild } from "discord.js";
-import { doc, setDoc } from "firebase/firestore";
-import { GuildConfig, GuildInfo } from "../data/schemas/guildConfig";
+import { Instance } from "@/client/client";
+import { GuildConfig, GuildInfo } from "@/data/schemas/guildConfig";
+import { ObjectId } from "mongodb";
 
-export default async (bot:any) => {
+export default async (bot:Instance) => {
     const {client, database} = bot;
     client.on('guildCreate', async (guild: Guild) => {
         const guildConfig: GuildConfig = {
@@ -10,6 +11,7 @@ export default async (bot:any) => {
             welcomeChannel: ''
         };
         const guildInfo: GuildInfo = {
+            "_id": guild.id as unknown as ObjectId,
             guildId: guild.id,
             guildName: guild.name,
             guildIcon: guild.iconURL() || 'none',
@@ -17,15 +19,15 @@ export default async (bot:any) => {
             members: guild.memberCount,
             commands: [],
             customCommands: [],
+            guildConfig: {
+                prefix: '!',
+                welcomeChannel: ''
+            }
         }
-        const infoDoc = doc(database, "Guilds", guild.id);
-        setDoc(infoDoc, {
-            ...guildInfo,
-            GuildConfig: {...guildConfig}
-        });
-
-        bot.config.set(guild.id, guildConfig);
-
+        const db = database.db('Guilds')
+        const guilds = db.collection(guild.id)
+        guilds.insertOne({ ...guildInfo})
+        bot.config.set(guild.id, guildInfo);
         console.log(`Joined ${guild.name}!`);
     })
 }

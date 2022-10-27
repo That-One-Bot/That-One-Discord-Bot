@@ -1,18 +1,19 @@
-import {initializeApp} from 'firebase/app';
-import { getFirestore } from "firebase/firestore"
-import {getPerformance} from 'firebase/performance'
-
-
-const serviceAccount = require('../serviceAccountKey.json');
-const serviceTest = require('../serviceAccountTest.json')
+import {MongoClient, ServerApiVersion} from "mongodb";
+import * as path from "path";
+import * as env from 'dotenv';
+env.config();
 
 const dbInit = async () => {
-
-    const db = initializeApp(serviceTest)
-
-    const firestore = getFirestore(db);
-
-    return firestore;
+    const pemPath = path.join(__dirname, '../../tobMongo.pem');
+    const db = new MongoClient(process.env.MONGO_URI as string, {
+        keepAlive: true,
+        ssl: true,
+        sslKey: pemPath,
+        sslCert: pemPath,
+        serverApi: ServerApiVersion.v1
+    });
+    console.log("Connected to MongoDB");
+    return db;
 }
 export default dbInit;
 

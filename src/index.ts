@@ -1,5 +1,6 @@
-import bot from './client/client';  
-import env from 'dotenv';
+import 'module-alias/register'
+import bot from '@/client/client';
+import * as env from 'dotenv';
 env.config();
 
 bot().then(bot => {

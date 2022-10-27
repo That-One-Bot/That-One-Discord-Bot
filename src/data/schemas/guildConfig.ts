@@ -1,10 +1,12 @@
 import { Client, Message } from "discord.js";
+import { ObjectId } from "mongodb";
 
 export interface GuildConfig {
     prefix: string;
     welcomeChannel: string;
 }
 export interface GuildInfo {
+    _id: ObjectId;
     guildId: string;
     guildName: string;
     guildIcon: string;
@@ -12,6 +14,7 @@ export interface GuildInfo {
     members: number;
     commands: any[] | undefined;
     customCommands: any[];
+    guildConfig: GuildConfig;
 };
 
 export interface GuildCommand {

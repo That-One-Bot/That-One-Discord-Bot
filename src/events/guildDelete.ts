@@ -1,14 +1,11 @@
 import { Guild } from "discord.js";
-import { collection, deleteDoc, getDocs, doc } from "firebase/firestore";
+import {Instance} from '@/client/client'
 
-export default async (bot:any) => {
+export default async (bot:Instance) => {
     const {client, database} = bot;
     client.on('guildDelete', async (guild: Guild) => {;
-
-        const colRef = collection(database, 'Guilds');
-        const docRef = await doc(colRef, guild.id);
-        deleteDoc(docRef);
-        
+        const guilds = database.db("Guilds")
+        await guilds.dropCollection(guild.id)
 
         console.log(`Left ${guild.name}!`);
     })

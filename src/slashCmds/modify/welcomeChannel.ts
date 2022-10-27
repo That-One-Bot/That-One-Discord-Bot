@@ -1,4 +1,7 @@
-import { setDoc, doc, collection } from "firebase/firestore";
+import { Instance } from "@/client/client";
+import { GuildInfo } from "@/data/schemas/guildConfig";
+import { ChatInputCommandInteraction } from "discord.js";
+
 import { Command } from "../../data/templates/cmdClass";
 
 export default {
@@ -9,29 +12,37 @@ export default {
             name: 'set',
             description: 'The new welcome channel for this server',
             type: 7,
-            required: false,
+            required: false
         },
     ],
-    async run(bot: any, interaction) {
-        const colRef = collection(bot.database, 'Guilds');
-        const guildId = interaction?.guild.id as string
-        const newChannel = interaction.options.getChannel('set') ?? null
-        let channel = bot.config.get(guildId)?.welcomeChannel
+    async run(bot: Instance, interaction:ChatInputCommandInteraction) {
+        const newChannel = interaction.options.getChannel('set') ?? null;
+        const guildId = interaction.guildId as string;
+        const guildInfo = bot.config.get(guildId) as GuildInfo;
+        let channel = guildInfo.guildConfig.welcomeChannel;
+
         if (newChannel === null) {
-            interaction.reply(`The current welcome channel for this server is <#${channel}>`)
+            if (channel === '') {
+                interaction.reply({content: 'No welcome channel set for this server', ephemeral: true});
+                return
+            } else if (channel !== '') {
+                interaction.reply({content: `The welcome channel for this server is <#${channel}>`, ephemeral: true});
+                return
+            }
         } else {
-            await interaction.reply(`<a:loading:1023807644982583396> Working...`)
-            const docRef = doc(bot.database, 'Guilds', guildId)
-            await setDoc(docRef, {
-                GuildConfig: {
-                    welcomeChannel: newChannel.id
-                }
-            }, { merge: true })
+            await interaction.reply(`<a:loading:1023807644982583396> Working...`);
+            const guildDb = bot.database.db('Guilds');
+            const guilds = guildDb.collection(guildId);
+            await guilds.updateOne({guildId: guildId}, {$set: {'guildConfig.welcomeChannel': newChannel.id}});
+
             bot.config.set(guildId, {
                 ...bot.config.get(guildId),
-                welcomeChannel: newChannel.id
-            })
-            await interaction.editReply(`Successfully changed the welcome channel for this server from <#${channel}> to ${newChannel}`)
+                guildConfig: {
+                    ...guildInfo.guildConfig,
+                    welcomeChannel: newChannel.id
+                }
+            });
+            await interaction.editReply(`Successfully changed the welcome channel for this server from <#${channel}> to ${newChannel}`);
         }
     }
-} as Command
+} as unknown as Command

@@ -1,7 +1,7 @@
 import { Client, PermissionsBitField, Routes } from "discord.js";
-import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
+import * as dotenv from "dotenv";
+import * as fs from "fs";
+import * as path from "path";
 import {REST} from '@discordjs/rest'
 dotenv.config();
 const token = process.env.TOKEN ? process.env.TOKEN : "";
@@ -21,7 +21,7 @@ export default async(client: any) => {
             const filterCmd = cmdFile.default;
             commands.push(filterCmd);
             client?.sCmds.set(filterCmd.name, filterCmd);
-            console.log(`Loaded ${filterCmd.name}`);
+            console.log(`Loaded ${filterCmd.name} command`);
         };
 
         (async () => {
